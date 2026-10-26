@@ -1,0 +1,16 @@
+{
+  "name": "beatframe",
+  "owner": {
+    "name": "Chamika Lakshan"
+  },
+  "metadata": {
+    "description": "Audio-driven motion video for Remotion and Claude Code"
+  },
+  "plugins": [
+    {
+      "name": "beatframe",
+      "source": "./plugins/beatframe",
+      "description": "Make music videos, lyric videos and beat-synced animations with Remotion, timed to the song's beats, bars, hits and lyrics."
+    }
+  ]
+}

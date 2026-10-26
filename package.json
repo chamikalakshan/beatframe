@@ -1,0 +1,14 @@
+{
+  "name": "beatframe-repo",
+  "private": true,
+  "type": "module",
+  "description": "Development scripts and tests for the Beatframe Claude Code plugin",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "test": "node --test \"test/*.test.mjs\"",
+    "demo-track": "node dev/synth-track.mjs .dev/demo-track.wav"
+  }
+}
