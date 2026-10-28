@@ -30,7 +30,8 @@ for (const format of formats) {
   const inputProps = { format };
   const composition = await selectComposition({ serveUrl, id: 'Video', inputProps, puppeteerInstance: browser });
   const props = { ...composition.props, ...inputProps };
-  const slug = String(props.title).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'video';
+  // Keeps letters of any script (Sinhala, Tamil, Hindi ...) and the zero-width joiners Sinhala conjuncts need.
+  const slug = String(props.title).normalize('NFC').toLowerCase().replace(/[^\p{L}\p{M}\p{N}‌‍]+/gu, '-').replace(/^-|-$/g, '') || 'video';
   const range = o.from || o.to
     ? [Math.round(+(o.from ?? 0) * composition.fps), Math.min(composition.durationInFrames - 1, Math.round(+(o.to ?? Infinity) * composition.fps))]
     : null;

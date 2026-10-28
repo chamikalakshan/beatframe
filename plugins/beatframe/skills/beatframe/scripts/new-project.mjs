@@ -3,7 +3,7 @@
 // and writes a first scene list that already follows the song (title, bars, hits, lyrics, outro).
 // Usage: node new-project.mjs <dir> --audio song.mp3 [--lyrics lyrics.srt|.lrc] [--title "..."] [--subtitle "..."]
 //        [--format 16:9|9:16|1:1] [--bpm N] [--first-bar N]
-import { copyFileSync, cpSync, existsSync, readdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
+import { copyFileSync, cpSync, existsSync, mkdirSync, readdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { basename, dirname, extname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
@@ -32,6 +32,8 @@ if (existsSync(dir) && readdirSync(dir).some(f => f !== '.DS_Store')) fail(`${di
 
 cpSync(STARTER, dir, { recursive: true, filter: src => !/[/\\](node_modules|out|stills)([/\\]|$)/.test(src) });
 renameSync(join(dir, 'gitignore'), join(dir, '.gitignore'));
+// The starter's public/ starts empty, and git does not keep empty folders, so installs from GitHub lack it.
+mkdirSync(join(dir, 'public'), { recursive: true });
 const audioName = 'song' + extname(o.audio).toLowerCase();
 copyFileSync(o.audio, join(dir, 'public', audioName));
 let lyricsCopy;

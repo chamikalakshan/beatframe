@@ -12,7 +12,7 @@ import { SR, FPS, features, onsetEnvelope, normalizeStd, estimateTempo, trackBea
 import { loadLyrics } from './lib/lyrics.mjs';
 import { timingReport } from './lib/report.mjs';
 
-export const GENERATOR = 'beatframe-analyze/0.1.0';
+export const GENERATOR = 'beatframe-analyze/0.1.1';
 const r3 = x => Math.round(x * 1000) / 1000;
 
 export async function analyze(file, { lyrics, meter = 4, bpm, bpmMin = 60, bpmMax = 200, firstBar } = {}) {

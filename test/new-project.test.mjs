@@ -1,9 +1,9 @@
 // new-project.mjs: copies the starter, analyzes the song and writes a scene list that follows it.
 import assert from 'node:assert/strict';
-import { spawnSync } from 'node:child_process';
-import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { execFileSync, spawnSync } from 'node:child_process';
+import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { after, test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { synth, wav } from '../dev/synth-track.mjs';
@@ -34,6 +34,22 @@ test('creates a ready project with a song-shaped scene list (path with spaces an
   assert.ok(types.includes('drop'), `no drop scene: ${JSON.stringify(props.scenes)}`);
   assert.ok(types.includes('lyrics'));
   assert.equal(types.at(-1), 'outro');
+});
+
+// Installs come from git, which drops empty folders (the starter's public/ was one). Run new-project
+// from a copy holding only the files git would publish.
+test('works from the files git publishes', () => {
+  const repo = fileURLToPath(new URL('..', import.meta.url));
+  const files = execFileSync('git', ['ls-files', '--cached', '--others', '--exclude-standard', 'plugins/beatframe/skills/beatframe'], { cwd: repo, encoding: 'utf8' }).trim().split('\n');
+  const copy = join(dir, 'published');
+  for (const f of files) {
+    mkdirSync(dirname(join(copy, f)), { recursive: true });
+    copyFileSync(join(repo, f), join(copy, f));
+  }
+  const proj = join(dir, 'from-git');
+  const r = spawnSync(process.execPath, [join(copy, 'plugins/beatframe/skills/beatframe/scripts/new-project.mjs'), proj, '--audio', join(dir, 'song.wav')], { encoding: 'utf8' });
+  assert.equal(r.status, 0, r.stderr);
+  assert.ok(existsSync(join(proj, 'public', 'timing.json')));
 });
 
 test('refuses a folder that is not empty', () => {

@@ -108,7 +108,7 @@ export function normalizeStd(x) {
 // falls on a whole number of frames.
 // Octave check against the low band (kicks, bass), which usually marks the beat itself:
 // - eighth-note hi-hats can make full-band onsets look twice as fast, so if the low band barely
-//   repeats at the chosen period but strongly at double it, the slower tempo wins;
+//   repeats at the chosen period but strongly at double it (and the full mix is undecided), the slower tempo wins;
 // - a snare on 2 and 4 makes full-band onsets repeat most strongly every two beats, so if the low
 //   band also repeats strongly at half the period, the faster tempo wins.
 export function estimateTempo(env, lowEnv, { min = 60, max = 200, center = 120 } = {}) {
@@ -127,7 +127,9 @@ export function estimateTempo(env, lowEnv, { min = 60, max = 200, center = 120 }
   const here = Math.max(0, acL[Math.round(lag)]);
   if (2 * lag <= lagMax) {
     const k = peakNear(2 * lag);
-    if (acL[k] > 2 * here) return 60 * FPS / refine(acL, k);
+    // Only when the full mix doesn't clearly prefer the faster tempo: in half-time grooves the kick
+    // lands on every other beat, so the low band alone would halve a song the mix plays at full speed.
+    if (acL[k] > 2 * here && acF[k] >= 0.8 * acF[Math.round(lag)]) return 60 * FPS / refine(acL, k);
   }
   if (lag / 2 >= lagMin) {
     const k = peakNear(lag / 2);

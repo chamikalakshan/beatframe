@@ -4,7 +4,7 @@
 
 Claude can't hear your song. Beatframe gives it ears: it turns the audio into a timing map (beats, bars, drops, lyric lines, loudness) and lets every scene, cut and effect lock onto it with labels like `L5`, `hit:2` or `bar:9+2beats`, so the video lands on the music instead of on guessed seconds.
 
-> Status: **0.1, milestone 1 of 5.** Music videos and beat-synced animation work today with the basic analyzer. Full analysis (sections, Whisper lyrics), karaoke, tap-to-mark and explainers are next; see [DESIGN.md](DESIGN.md).
+> Status: **0.1.1, milestone 1 of 5.** Music videos and beat-synced animation work today with the basic analyzer. Full analysis (sections, Whisper lyrics), karaoke, tap-to-mark and explainers are next; see [DESIGN.md](DESIGN.md).
 
 ## Install
 
